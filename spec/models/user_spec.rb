@@ -3,6 +3,13 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   let(:user) { build(:user) }
 
+  describe "associations" do
+    it { should have_many(:user_followees) }
+    it { should have_many(:user_followers) }
+    it { should have_many(:followers).through(:user_followees) }
+    it { should have_many(:followees).through(:user_followers) }
+  end
+
   describe "#name" do
     context "when not present" do
       it "should be invalid" do
