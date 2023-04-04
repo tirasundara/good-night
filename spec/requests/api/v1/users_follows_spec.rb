@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "UserFollows", type: :request do
+  let!(:follower) { create(:user, name: "Bob") }
+  let!(:followee) { create(:user, name: "Alice") }
+
   describe "POST /api/v1/user_follows" do
-    let!(:follower) { create(:user, name: "Bob") }
-    let!(:followee) { create(:user, name: "Alice") }
     let(:user_follow_params) do
       {
         followee_id: followee.id
@@ -40,6 +41,42 @@ RSpec.describe "UserFollows", type: :request do
         expect(resp_body["errors"][0]["status"]).to eq(422)
         expect(resp_body["errors"][0]["title"]).to eq("Unprocessable Entity")
         expect(resp_body["errors"][0]["detail"]).to eq("Validation failed: Followee must exist")
+      end
+    end
+  end
+
+  describe "DELETE /api/v1/user_follows/:followee_id" do
+    before(:each) do
+      follower.follow! followee.id
+    end
+
+    context "with valid followee_id" do
+      it "returns http no_content status" do
+        delete "/api/v1/user_follows/#{followee.id}"
+
+        expect(response).to have_http_status(:no_content)
+      end
+  
+      it "returns empty response body" do
+        delete "/api/v1/user_follows/#{followee.id}"
+  
+        expect(response.body).to be_empty
+      end
+    end
+
+    context "with invalid followee_id" do
+      it "returns http not_found status" do
+        delete "/api/v1/user_follows/0"
+
+        expect(response).to have_http_status(:not_found)
+      end
+  
+      it "returns correct json response" do
+        delete "/api/v1/user_follows/0"
+  
+        resp_body = JSON.parse(response.body)
+        expect(resp_body["errors"][0]["status"]).to eq(404)
+        expect(resp_body["errors"][0]["title"]).to eq("Record not Found")
       end
     end
   end

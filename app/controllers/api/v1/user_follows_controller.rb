@@ -3,7 +3,14 @@ module Api::V1
 
     def create
       user_follow = current_user.follow! user_follow_params[:followee_id]
+
       render json: UserFollowSerializer.new(user_follow).serializable_hash, status: :created
+    end
+
+    def destroy
+      current_user.unfollow! params[:followee_id]
+
+      render json: {}, status: :no_content
     end
 
 
