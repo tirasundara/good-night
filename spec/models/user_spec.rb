@@ -66,4 +66,47 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#unfollow!" do
+    let!(:followee) { create(:user, name: "Followee") }
+    before(:each) do
+      user.save!
+      user.follow! followee.id
+    end
+
+    context "with valid followee_id" do
+      it "should return UserFollow instance" do
+        user_follow = user.unfollow! followee.id
+
+        expect(user_follow).to be_an_instance_of(UserFollow)
+        expect(user_follow.follower_id).to eq(user.id)
+        expect(user_follow.followee_id).to eq(followee.id)
+      end
+
+      it "should decrease User#followees by 1" do
+        expect {
+          user.unfollow! followee.id
+      }.to change { user.followees.count }.by(-1)
+      end
+    end
+
+    context "when invoked multiple times with the same followee_id" do
+      it "should only delete one instance of UserFollow and raise ActiveRecord::RecordNotFound error" do
+        user.unfollow! followee.id  # 1st time
+
+        expect {
+          user.unfollow! followee.id  # 2nd time
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with invalid followee_id" do
+      let(:invalid_followee_id) { 0 }
+      it "should raise ActiveRecord::RecordNotFound error" do
+        expect {
+          user.unfollow! invalid_followee_id
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end
