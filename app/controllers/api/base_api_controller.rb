@@ -1,5 +1,7 @@
 module Api
   class BaseApiController < ApplicationController
+    include ErrorHandler
+
 
     private
 
