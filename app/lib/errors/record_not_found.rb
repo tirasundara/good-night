@@ -1,7 +1,7 @@
 module Errors
   class RecordNotFound < BaseError
 
-    def initialize
+    def initialize(*args)
       super(
         title: "Record not Found",
         status: 404,

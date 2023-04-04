@@ -2,7 +2,7 @@ module Api::ErrorHandler
   extend ActiveSupport::Concern
 
   ERRORS = {
-    "ActiveRecord::RecordNotFound" => "Errors::NotFound",
+    "ActiveRecord::RecordNotFound" => "Errors::RecordNotFound",
     "ActiveRecord::RecordInvalid" => "Errors::RecordInvalid"
   }
 
