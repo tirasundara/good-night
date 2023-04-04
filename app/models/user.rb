@@ -10,4 +10,7 @@ class User < ApplicationRecord
 
   validates_presence_of :name
 
+  def follow!(followee_id)
+    user_followers.find_or_create_by!(followee_id: followee_id)
+  end
 end
