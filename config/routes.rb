@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
       resources :sleep_times, only: :create
       resources :wake_up_times, only: :create
+      resources :sleep_records, only: :index
     end
   end
 end
