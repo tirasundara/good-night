@@ -1,6 +1,4 @@
 class SleepRecord < ApplicationRecord
-  scope :by_last_week, -> () { where(created_at: Time.now.utc.last_week.beginning_of_week..Time.now.utc.last_week.end_of_week) }
-  scope :order_by_duration, -> () { joins(:user, :sleep_time, :wake_up_time).select("sleep_records.id, sleep_records.created_at, sleep_records.user_id, sleep_times.sleep_ts, wake_up_times.wake_up_ts, (wake_up_times.wake_up_ts - sleep_times.sleep_ts) AS duration").order("duration ASC") }
 
   belongs_to :user
   belongs_to :sleep_time, optional: true
