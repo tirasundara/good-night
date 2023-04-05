@@ -10,7 +10,7 @@ module Api
     def current_user
       return @current_user if defined? @current_user
 
-      @current_user = User.find_or_create_by(name: "Bob")
+      @current_user = User.find_or_create_by(name: DEFAULT_USER_NAME)
     end
   end
 end

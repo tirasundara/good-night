@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "UserFollows", type: :request do
-  let!(:follower) { create(:user, name: "Bob") }
-  let!(:followee) { create(:user, name: "Alice") }
+  let!(:follower) { create(:user, name: DEFAULT_USER_NAME) }
+  let!(:followee) { create(:user, name: "alice") }
 
   describe "POST /api/v1/user_follows" do
     let(:user_follow_params) do
