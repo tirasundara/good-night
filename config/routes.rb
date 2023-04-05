@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       delete "/user_follows/:followee_id", to: "user_follows#destroy"
 
       resources :sleep_times, only: :create
+      resources :wake_up_times, only: :create
     end
   end
 end
