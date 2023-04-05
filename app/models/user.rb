@@ -8,6 +8,8 @@ class User < ApplicationRecord
   # list of users followed by the user
   has_many :followees, through: :user_followers, class_name: "User"
 
+  has_many :sleep_records
+
   validates_presence_of :name
 
   def follow!(followee_id)
@@ -17,5 +19,12 @@ class User < ApplicationRecord
   def unfollow!(followee_id)
     user_follow = user_followers.find_by!(followee_id: followee_id)
     user_follow.destroy
+  end
+
+  # User#log_sleep! stores user's sleep clock-in data
+  def log_sleep!(at: nil)
+    at ||= Time.now.utc
+    new_sleep_record = sleep_records.build
+    new_sleep_record.create_sleep_time!(sleep_ts: at)
   end
 end
